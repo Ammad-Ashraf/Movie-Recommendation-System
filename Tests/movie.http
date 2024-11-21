@@ -1,0 +1,211 @@
+@baseUrl = http://localhost:5001/api
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzMzOTcwMTQwOGJjYzQ4ZDliMDI4NmEiLCJpYXQiOjE3MzE1MTUzMTgsImV4cCI6MTczMTYwMTcxOH0.xYqsV9SW-lTJG9iNGcJCBanXNRHjHpoalwXKtEX5lmA
+@movieId = REPLACE_WITH_VALID_MOVIE_ID
+@personId = REPLACE_WITH_VALID_PERSON_ID
+
+### User Authentication (for reference)
+
+# @name login
+POST {{baseUrl}}/users/login
+Content-Type: application/json
+
+{
+  "email": "ashrafammad1@gmail.com",
+  "password": "ammad1122."
+}
+
+###
+
+# Use the response from the login request to set the authToken
+@authToken = {{login.response.body.token}}
+
+### Movie Management
+
+POST {{baseUrl}}/movies
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+Inception
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="genre[]"
+
+Sci-Fi
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="genre[]"
+
+Action
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="director"
+
+60a7c8d9e6b3f32d4c8901ab
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="cast[]"
+
+60a7c8d9e6b3f32d4c8901cd
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="cast[]"
+
+60a7c8d9e6b3f32d4c8901ef
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="releaseDate"
+
+2010-07-16
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="runtime"
+
+148
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="synopsis"
+
+A thief who enters the dreams of others to steal secrets from their subconscious.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="averageRating"
+
+4.5
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="coverPhoto"; filename="inception.jpg"
+Content-Type: image/jpeg
+
+< C:/Users/ashra/OneDrive/Pictures/Pictures/ME/11.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="trivia[]"
+
+Trivia needs to be determined
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="goofs[]"
+
+goofs needs to be determined
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="soundtrack[0][title]"
+
+hello
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="soundtrack[0][artist]"
+
+Atif Aslam
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ageRating"
+
+PG-13
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="parentalGuidance"
+
+Not for teenagers
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="boxOffice[openingWeekend]"
+
+62785337
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="boxOffice[totalEarnings]"
+
+836836967
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="boxOffice[internationalRevenue]"
+
+533200000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="awards[0][name]"
+
+Academy Award
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="awards[0][category]"
+
+Best Visual Effects
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="awards[0][year]"
+
+2011
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
+
+# Update a movie
+PUT {{baseUrl}}/movies/{{movieId}}
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+Inception (Updated)
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="synopsis"
+
+An updated synopsis for Inception.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="coverPhoto"; filename="inception_updated.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/your/updated_image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+# Delete a movie
+DELETE {{baseUrl}}/movies/{{movieId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+# Get a single movie
+GET {{baseUrl}}/movies/{{movieId}}
+
+###
+
+# Get all movies (with pagination)
+GET {{baseUrl}}/movies?page=1&limit=10
+
+### Person Management
+
+# Add a person
+POST {{baseUrl}}/movies/person
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Christopher Nolan
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="birthDate"
+
+1970-07-30
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="roles"
+
+["Director", "Writer"]
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="biography"
+
+Christopher Nolan is a British-American film director, producer, and screenwriter.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo"; filename="nolan.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/your/person_image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+# Update a person
+PUT {{baseUrl}}/movies/person/{{personId}}
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="biography"
+
+Updated biography for Christopher Nolan.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo"; filename="nolan_updated.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/your/updated_person_image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+# Get person details
+GET {{baseUrl}}/movies/person/{{personId}}
